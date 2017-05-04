@@ -16,13 +16,12 @@ D3DLIB = \
 -lgdi32
 		
 WIN_SRC=\
-svideo_rtsp.c \
+svideop.c \
 render.c \
 render_gdi.c \
 render_d3d.c \
 svideo_convert.c \
-winapi.c \
-render_carbox.c
+winapi.c 
 
 
 LINUX_INCLUD=\
@@ -58,9 +57,13 @@ all:
 win:svideo.dll
 linux:libHvDeviceVideo.so hvplayer
 
-svideo.dll:$(WIN_SRC)
-	gcc $(CFLAGS) -shared -Wl,--output-def,svideo.def,--out-implib,svideo.a -Iffmpeg/include -o $@ $^ $(FFMPEGLIB_WIN) $(D3DLIB)
+svideo.dll:svideop.exe svideo.c 
+	gcc $(CFLAGS) -shared -Wl,--output-def,svideo.def,--out-implib,svideo.a -o $@ svideo.c 
 	lib /machine:ix86 /def:svideo.def
+
+svideop.exe:$(WIN_SRC)
+	gcc $(CFLAGS)  -Iffmpeg/include -o $@ $^ $(FFMPEGLIB_WIN) $(D3DLIB)
+
 
 hvplayer:$(HVPLAYER_SRC)
 	gcc $(CFLAGS) $(LINUX_INCLUDE) -o $@ $^ $(LINUX_LIB)
@@ -69,13 +72,17 @@ libHvDeviceVideo.so:linux/hvvideo.c
 	gcc $(CFLAGS) -fPIC -shared -o $@ $^ -lpthread
 	
 .PHONY:clean
+
 clean:
 	-rm *.dll
 	-rm *.so
 	-rm *.a
 	-rm *.def
 	-rm *.lib
+	-rm *.exe
+
 .PHONY:install
+
 install:
 	-mkdir ./bin
 	-mkdir ./bin/lib
