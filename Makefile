@@ -72,6 +72,7 @@ libHvDeviceVideo.so:linux/hvvideo.c
 	gcc $(CFLAGS) -fPIC -shared -o $@ $^ -lpthread
 	
 .PHONY:clean
+
 clean:
 	-rm *.dll
 	-rm *.so
@@ -79,7 +80,9 @@ clean:
 	-rm *.def
 	-rm *.lib
 	-rm *.exe
+
 .PHONY:install
+
 install:
 	-mkdir ./bin
 	-mkdir ./bin/lib
