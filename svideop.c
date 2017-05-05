@@ -78,7 +78,8 @@ play(){
 
 		if (pk.stream_index == vindex)
 		{
-			avcodec_decode_video2(cc, yuv_buf, &dr, &pk);
+			if(avcodec_decode_video2(cc, yuv_buf, &dr, &pk) < 0){break;}
+			
 			if (dr > 0)
 			{
 				frame.h = cc->coded_height;
@@ -92,6 +93,7 @@ play(){
 				{
 					render->destory(&render);
 					render = render_create(RENDER_TYPE_D3D, _hwnd, cc->coded_width, cc->coded_height);
+					if(render == NULL) {break;}
 				}
 			}
 		}
