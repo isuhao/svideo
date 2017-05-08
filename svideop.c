@@ -14,6 +14,12 @@
 uint64_t _hwnd;
 char *_url;
 char *_protocol;
+time_t _live;
+
+static int
+timeout(void *p){
+	return time(0) - _live > 6;
+}
 
 static void
 play(){
@@ -26,6 +32,8 @@ play(){
 	if (afc == 0){
 		goto err;
 	}
+	_live = time(0);
+	afc->interrupt_callback.callback = timeout;
 	AVDictionary *dir = NULL;
 	char *k1 = "stimeout";
 	char *v1 = "10";
@@ -75,11 +83,9 @@ play(){
 	}
 	while (av_read_frame(afc, &pk) >= 0)
 	{
-
 		if (pk.stream_index == vindex)
 		{
 			if(avcodec_decode_video2(cc, yuv_buf, &dr, &pk) < 0){break;}
-			
 			if (dr > 0)
 			{
 				frame.h = cc->coded_height;
@@ -95,6 +101,7 @@ play(){
 					render = render_create(RENDER_TYPE_D3D, _hwnd, cc->coded_width, cc->coded_height);
 					if(render == NULL) {break;}
 				}
+				_live = time(0);
 			}
 		}
 		av_free_packet(&pk);
