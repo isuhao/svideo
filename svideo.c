@@ -60,6 +60,7 @@ work(void *p){
 void 
 svideo_init(){
 	if(_init) return;
+	system("taskkill /F /IM svideop.exe");
 	_init = true;
 	memset(_players,0,sizeof(_players));
 	_hthread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)work, NULL, 0, 0); 
