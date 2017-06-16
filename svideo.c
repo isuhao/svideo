@@ -35,7 +35,7 @@ create_player(player_t *p){
 static int 
 work(void *p){
 	int i;
-	while(1){
+	while(!_close){
 		if(_count == 0) {Sleep(1000);}
 		for(i = 0; i<_count;i++){
 			player_t *py = &_players[i];
@@ -48,12 +48,9 @@ work(void *p){
 					py->hprocess = 0;
 				}
 			}
-			if(_close){
-				system("taskkill /F /IM svideop.exe");
-				return 0;
-			}
 		}
 	}
+	system("taskkill /F /IM svideop.exe");
 	return 0;
 }
 
