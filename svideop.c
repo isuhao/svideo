@@ -5,7 +5,6 @@
 #include "winapi.h"
 #include "svideo_rtsp.h"
 #include "render.h"
-#include "render_carbox.h"
 #include "libavcodec/avcodec.h"
 #include "libswscale/swscale.h"
 #include "libavformat/avformat.h"
